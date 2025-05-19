@@ -29,13 +29,7 @@ const HomeComponent = () => {
             const data = await uploadDocument(file);
             setContext(data.text || "");
             setFileName(file.name);
-            
-            // Add a new message showing the file attachment
-            setMessages(prev => [
-                ...prev,
-                createUserMessage(`Attached document: ${file.name}`)
-            ]);
-            
+            // No longer adding message here
         } catch (e) {
             setContext("");
             setFileName("");
@@ -71,7 +65,15 @@ const HomeComponent = () => {
     };
 
     const handleSendMessage = (message: string) => {
+        // Add user's message
         setMessages(prev => [...prev, createUserMessage(message)]);
+        
+        // If there's a file attached, add file message
+        if (fileName) {
+            setMessages(prev => [...prev, createUserMessage(`Attached document: ${fileName}`)]);
+        }
+        
+        // Send to LLM
         sendMessageToLLM(message);
     };
 
