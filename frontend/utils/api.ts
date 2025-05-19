@@ -3,7 +3,7 @@
 export async function uploadDocument(file: File): Promise<{ text: string }> {
   const formData = new FormData();
   formData.append("file", file);
-  const res = await fetch("http://127.0.0.1:8000/upload", {
+  const res = await fetch("https://docubot-ai.onrender.com/upload", {
     method: "POST",
     body: formData,
   });
@@ -14,7 +14,7 @@ export async function uploadDocument(file: File): Promise<{ text: string }> {
 }
 
 export async function askQuestion(question: string, context: string): Promise<{ answer: string }> {
-  const res = await fetch("http://127.0.0.1:8000/ask", {
+  const res = await fetch("https://docubot-ai.onrender.com/ask", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question, context }),

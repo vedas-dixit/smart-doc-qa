@@ -4,6 +4,7 @@ import TextAreaInput from './TextInputComponent';
 import ReactMarkdown from 'react-markdown';
 import { uploadDocument, askQuestion } from '../utils/api';
 import { Message, createUserMessage, createBotMessage } from '../utils/chat';
+import { FileText } from 'lucide-react';
 
 const HomeComponent = () => {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -28,6 +29,13 @@ const HomeComponent = () => {
             const data = await uploadDocument(file);
             setContext(data.text || "");
             setFileName(file.name);
+            
+            // Add a new message showing the file attachment
+            setMessages(prev => [
+                ...prev,
+                createUserMessage(`Attached document: ${file.name}`)
+            ]);
+            
         } catch (e) {
             setContext("");
             setFileName("");
@@ -68,7 +76,7 @@ const HomeComponent = () => {
     };
 
     return (
-        <div className="relative flex h-screen flex-col bg-gradient-to-b from-[#041313] via-[#1f3233] to-[#2C2E33]">
+        <div className="relative flex h-screen flex-col ">
             {/* Centered chat container */}
             <div className="flex flex-1 flex-col items-center justify-center w-full">
                 <div className="flex flex-col w-full max-w-[700px] h-full mx-auto">
@@ -114,7 +122,21 @@ const HomeComponent = () => {
                                                 }`}
                                         >
                                             {msg.isUser ? (
-                                                <div>{msg.content}</div>
+                                                <div>
+                                                    {msg.content.startsWith('Attached document:') ? (
+                                                        <div className="flex items-center space-x-2">
+                                                            <div className="bg-pink-500 p-2 rounded-md">
+                                                                <FileText size={18} className="text-white" />
+                                                            </div>
+                                                            <div>
+                                                                <div>{msg.content.replace('Attached document: ', '')}</div>
+                                                                <div className="text-xs text-gray-400">PDF</div>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div>{msg.content}</div>
+                                                    )}
+                                                </div>
                                             ) : (
                                                 <div className="prose prose-sm max-w-none prose-invert">
                                                     <ReactMarkdown>{msg.content}</ReactMarkdown>
