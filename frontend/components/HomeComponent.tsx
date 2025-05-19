@@ -32,6 +32,7 @@ const HomeComponent = () => {
             setContext("");
             setFileName("");
             alert("Failed to extract text from document.");
+            console.log("Error:",e)
         } finally {
             setUploading(false);
         }
@@ -55,6 +56,7 @@ const HomeComponent = () => {
                 ...prev,
                 createBotMessage("Error getting answer."),
             ]);
+            console.log("Error:",e)
         } finally {
             setIsLoading(false);
         }
@@ -71,7 +73,7 @@ const HomeComponent = () => {
             <div className="flex flex-1 flex-col items-center justify-center w-full">
                 <div className="flex flex-col w-full max-w-[700px] h-full mx-auto">
                     {/* Chat header */}
-                    <div className="sticky top-0 z-10 px-4 py-3 bg-[#1c2727] bg-opacity-80 backdrop-blur-sm text-white rounded-2xl mt-2">
+                    <div className="sticky top-0 z-10 px-4 py-3 bg-[#1c2727] bg-opacity-80 backdrop-blur-sm text-white rounded-2xl mt-2 mx-3">
                         <h1 className="text-center text-lg font-medium">DocuBot <span className='text-gray-300'>AI Assistant</span></h1>
                     </div>
 
