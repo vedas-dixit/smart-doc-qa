@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api import document, chat  # Your routers
+from api import document, chat, resethistory  # Your routers
 
 app = FastAPI()
 
@@ -19,6 +19,7 @@ app.add_middleware(
 # Register your routers
 app.include_router(document.router)
 app.include_router(chat.router)
+app.include_router(resethistory.router)
 
 @app.get("/")
 def read_root():
