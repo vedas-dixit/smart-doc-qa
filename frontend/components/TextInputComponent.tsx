@@ -10,9 +10,10 @@ interface TextAreaInputProps {
   uploading: boolean;
   fileName: string;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemoveFile: () => void;
 }
 
-const TextAreaInput = ({ onSend, isLoading = false, context, setContext, uploading, fileName, onFileChange }: TextAreaInputProps) => {
+const TextAreaInput = ({ onSend, isLoading = false, context, setContext, uploading, fileName, onFileChange, onRemoveFile }: TextAreaInputProps) => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -51,15 +52,6 @@ const TextAreaInput = ({ onSend, isLoading = false, context, setContext, uploadi
     }
   };
 
-  const handleRemoveFile = () => {
-    setContext("");
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-    // Optionally, you can call onFileChange with a synthetic event if needed
-    // onFileChange({ target: { files: [] } } as any);
-  };
-
   return (
     <div className="fixed bottom-4 left-0 right-0 mx-auto w-full max-w-3xl px-4">
       <div className="relative flex flex-col items-end rounded-xl border border-gray-300 bg-white p-2 shadow-lg">
@@ -72,7 +64,7 @@ const TextAreaInput = ({ onSend, isLoading = false, context, setContext, uploadi
               type="button"
               className="flex items-center justify-center rounded-full hover:bg-gray-200 transition p-1 ml-1"
               aria-label="Remove file"
-              onClick={handleRemoveFile}
+              onClick={onRemoveFile}
             >
               <XIcon size={14} className="text-gray-400" />
             </button>
