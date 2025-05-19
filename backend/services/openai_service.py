@@ -22,7 +22,7 @@ def ask_llm(question: str, context: str) -> str:
             {"role": "user", "content": f"Document: {context}\n\nQuestion: {question}\nAnswer:"}
         ],
         "temperature": 0.7,
-        "max_tokens": 1000
+        "max_tokens": 10000
     }
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
