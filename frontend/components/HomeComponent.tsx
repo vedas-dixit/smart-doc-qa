@@ -66,23 +66,23 @@ const HomeComponent = () => {
     };
 
     return (
-        <div className="relative flex h-screen flex-col bg-gray-50">
+        <div className="relative flex h-screen flex-col bg-gradient-to-b from-[#041313] via-[#1f3233] to-[#2C2E33]">
             {/* Centered chat container */}
             <div className="flex flex-1 flex-col items-center justify-center w-full">
                 <div className="flex flex-col w-full max-w-[700px] h-full mx-auto">
                     {/* Chat header */}
-                    <div className="sticky top-0 z-10  px-4 py-3 text-Black ">
-                        <h1 className="text-center text-lg font-medium">DocuBot <span className='text-gray-700'>AI Assistant</span></h1>
+                    <div className="sticky top-0 z-10 px-4 py-3 bg-[#1c2727] bg-opacity-80 backdrop-blur-sm text-white rounded-2xl mt-2">
+                        <h1 className="text-center text-lg font-medium">DocuBot <span className='text-gray-300'>AI Assistant</span></h1>
                     </div>
 
                     {/* Chat messages */}
-                    <div className="flex-1 overflow-y-auto px-4 pb-24 pt-4 items-center bg-white ">
+                    <div className="flex-1 overflow-y-auto px-4 pb-24 pt-4 items-center">
                         {messages.length === 0 ? (
-                            <div className="flex h-full flex-col items-center justify-center text-center text-gray-500 max-w-5xl">
-                                <div className="mb-4 rounded-full bg-blue-100 p-4">
+                            <div className="flex h-full flex-col items-center justify-center text-center text-gray-300 max-w-5xl">
+                                <div className="mb-4 rounded-full bg-[#0F4C4C] bg-opacity-40 p-4">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className="h-8 w-8 text-blue-500"
+                                        className="h-8 w-8 text-teal-400"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
@@ -95,7 +95,7 @@ const HomeComponent = () => {
                                         />
                                     </svg>
                                 </div>
-                                <p className="text-lg font-medium">Welcome to AI Assistant</p>
+                                <p className="text-lg font-medium text-white">Welcome to AI Assistant</p>
                                 <p className="mt-2 max-w-sm">Type a message below to start chatting with the AI</p>
                             </div>
                         ) : (
@@ -107,19 +107,19 @@ const HomeComponent = () => {
                                     >
                                         <div
                                             className={`max-w-[80%] rounded-xl px-4 py-3 ${msg.isUser
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'bg-gray-100 shadow'
+                                                    ? 'bg-[#204142] text-white'
+                                                    : 'bg-[#1C2D2E] text-gray-200 shadow'
                                                 }`}
                                         >
                                             {msg.isUser ? (
                                                 <div>{msg.content}</div>
                                             ) : (
-                                                <div className="prose prose-sm max-w-none">
+                                                <div className="prose prose-sm max-w-none prose-invert">
                                                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                                                 </div>
                                             )}
                                             <div
-                                                className={`mt-1 text-right text-xs ${msg.isUser ? 'text-blue-200' : 'text-gray-400'
+                                                className={`mt-1 text-right text-xs ${msg.isUser ? 'text-white' : 'text-gray-400'
                                                     }`}
                                             >
                                                 {msg.timestamp.toLocaleTimeString([], {
@@ -132,11 +132,11 @@ const HomeComponent = () => {
                                 ))}
                                 {isLoading && (
                                     <div className="flex justify-start">
-                                        <div className="bg-gray-100 max-w-[80%] rounded-xl px-4 py-3 shadow">
+                                        <div className="bg-[#1C2D2E] max-w-[80%] rounded-xl px-4 py-3 shadow text-gray-200">
                                             <div className="flex space-x-2">
-                                                <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400"></div>
-                                                <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: '0.2s' }}></div>
-                                                <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: '0.4s' }}></div>
+                                                <div className="h-2 w-2 animate-bounce rounded-full bg-teal-900"></div>
+                                                <div className="h-2 w-2 animate-bounce rounded-full bg-teal-900" style={{ animationDelay: '0.2s' }}></div>
+                                                <div className="h-2 w-2 animate-bounce rounded-full bg-teal-900" style={{ animationDelay: '0.4s' }}></div>
                                             </div>
                                         </div>
                                     </div>
@@ -147,16 +147,15 @@ const HomeComponent = () => {
                     </div>
 
                     {/* Chat input */}
-                    <div className="w-full px-4 py-2 bg-white rounded-b-xl shadow-md">
+                    <div className="w-full px-4 py-2 bg-[#2C2E33] rounded-t-xl shadow-md">
                         <TextAreaInput
                             onSend={handleSendMessage}
                             isLoading={isLoading}
-                            context={context}
-                            setContext={setContext}
                             uploading={uploading}
                             fileName={fileName}
                             onFileChange={handleFileChange}
                             onRemoveFile={handleRemoveFile}
+                            handleRemoveFile={handleRemoveFile}
                         />
                     </div>
                 </div>
