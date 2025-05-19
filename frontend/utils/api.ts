@@ -24,3 +24,10 @@ export async function askQuestion(question: string, context: string): Promise<{ 
   }
   return res.json();
 }
+
+export async function resetHistory(){
+  const res = await fetch(`${BASE_URL}/resetHistory`);
+  if (!res.ok) {
+    throw new Error("Failed to get answer");
+  }
+}

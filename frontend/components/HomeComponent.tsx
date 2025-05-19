@@ -2,13 +2,14 @@
 import { useState, useRef, useEffect } from 'react';
 import TextAreaInput from './TextInputComponent';
 import ReactMarkdown from 'react-markdown';
-import { uploadDocument, askQuestion } from '../utils/api';
+import { uploadDocument, askQuestion, resetHistory } from '../utils/api';
 import { Message, createUserMessage, createBotMessage } from '../utils/chat';
-import { FileText } from 'lucide-react';
+import { FileText, RotateCcw } from 'lucide-react';
 
 const HomeComponent = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [resetting, setResetting] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [context, setContext] = useState("");
     const [uploading, setUploading] = useState(false);
@@ -34,7 +35,7 @@ const HomeComponent = () => {
             setContext("");
             setFileName("");
             alert("Failed to extract text from document.");
-            console.log("Error:",e)
+            console.log("Error:", e)
         } finally {
             setUploading(false);
         }
@@ -58,7 +59,7 @@ const HomeComponent = () => {
                 ...prev,
                 createBotMessage("Error getting answer."),
             ]);
-            console.log("Error:",e)
+            console.log("Error:", e)
         } finally {
             setIsLoading(false);
         }
@@ -67,14 +68,29 @@ const HomeComponent = () => {
     const handleSendMessage = (message: string) => {
         // Add user's message
         setMessages(prev => [...prev, createUserMessage(message)]);
-        
+
         // If there's a file attached, add file message
         if (fileName) {
             setMessages(prev => [...prev, createUserMessage(`Attached document: ${fileName}`)]);
         }
-        
+
         // Send to LLM
         sendMessageToLLM(message);
+    };
+
+    const handleResetHistory = async () => {
+        setResetting(true);
+        try {
+            await resetHistory();
+            setMessages([]);
+            setFileName("");
+            setContext("");
+        } catch (e) {
+            alert("Failed to reset history.");
+            console.log("Error:", e);
+        } finally {
+            setResetting(false);
+        }
     };
 
     return (
@@ -83,8 +99,27 @@ const HomeComponent = () => {
             <div className="flex flex-1 flex-col items-center justify-center w-full">
                 <div className="flex flex-col w-full max-w-[700px] h-full mx-auto">
                     {/* Chat header */}
-                    <div className="sticky top-0 z-10 px-4 py-3 bg-[#1c2727] bg-opacity-80 backdrop-blur-sm text-white rounded-2xl mt-2 mx-3">
-                        <h1 className="text-center text-lg font-medium">DocuBot <span className='text-gray-300'>AI Assistant</span></h1>
+                    <div className="sticky top-0 z-10 px-4 py-3 bg-[#1c2727] bg-opacity-80 backdrop-blur-sm text-white rounded-2xl mt-2 mx-3 flex justify-between items-center">
+                        <div className="w-10"></div> {/* Empty space for alignment */}
+
+                        <h1 className="text-center text-lg font-medium">
+                            DocuBot <span className='text-gray-300'>AI Assistant</span>
+                        </h1>
+
+                        <div className="relative group">
+                            <button
+                                onClick={handleResetHistory}
+                                disabled={resetting}
+                                className="p-2 rounded-full hover:bg-[#0F4C4C] transition-colors"
+                            >
+                                <RotateCcw size={18} className={`text-white ${resetting ? 'animate-spin' : ''}`} />
+                            </button>
+
+                            {/* Tooltip */}
+                            <div className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                                Reset History
+                            </div>
+                        </div>
                     </div>
 
                     {/* Chat messages */}
@@ -119,8 +154,8 @@ const HomeComponent = () => {
                                     >
                                         <div
                                             className={`max-w-[80%] rounded-xl px-4 py-3 ${msg.isUser
-                                                    ? 'bg-[#204142] text-white'
-                                                    : 'bg-[#1C2D2E] text-gray-200 shadow'
+                                                ? 'bg-[#204142] text-white'
+                                                : 'bg-[#1C2D2E] text-gray-200 shadow'
                                                 }`}
                                         >
                                             {msg.isUser ? (
