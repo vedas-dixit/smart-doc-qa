@@ -16,9 +16,13 @@ def ask_llm(question: str, context: str) -> str:
         "Content-Type": "application/json",
         "api-key": AZURE_OPENAI_KEY,
     }
+    system_prompt = (
+        "You are a smart assistant helping a user understand a specific document. "
+        "The user might ask follow-up questions. "
+    )
     data = {
         "messages": [
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Document: {context}\n\nQuestion: {question}\nAnswer:"}
         ],
         "temperature": 0.7,
