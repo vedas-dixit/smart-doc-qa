@@ -6,3 +6,5 @@ openai
 PyPDF2
 python-docx
 requirememnts
+requests
+pydantic

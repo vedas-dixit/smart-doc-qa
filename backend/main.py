@@ -7,7 +7,7 @@ app = FastAPI()
 # Allow frontend to call backend locally (adjust in prod)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # frontend
+    allow_origins=["http://localhost:3000", "https://docubot-nu.vercel.app/"],  # frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
