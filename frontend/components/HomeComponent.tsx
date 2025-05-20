@@ -208,7 +208,7 @@ const HomeComponent = () => {
                     </div>
 
                     {/* Chat input */}
-                    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl mx-4 my-2  rounded-t-xl shadow-md z-50">
+                    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl my-2  rounded-t-xl shadow-md z-50">
                         <TextAreaInput
                             onSend={handleSendMessage}
                             isLoading={isLoading}
