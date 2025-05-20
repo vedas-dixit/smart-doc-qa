@@ -387,13 +387,15 @@ ok so i have a few qustions:
 1. how do you propose we'savee context ok the chat-> backend inmeory of array text? like keep storing the request and response until the array exceeds the size of the limit of tokens and when hit follow up api, add that stored array tokens text wth the new qs 
 2. and wne we add any document: text pdf we need to extract text from those ourselves and send the llm : this is a pdf: text.... and for the presistent storage send the whole conversation stored in the array with every qs and update the array based on the window so it wont exceed so newQsLength+contextarrlength <= limit of the llm api else slice context
 Designing the Application Flow
+
 Ok lets make a markdown document:
+```text
 Frontend (React + TypeScript)
 |
 |---> [1] Upload Document (PDF / TXT)
-| |
-| V
-| POST /upload
+|           |
+|           V
+|     POST /upload
 |
 |---> [2] Ask Question (via input)
 |
@@ -402,53 +404,38 @@ POST /ask
 |
 V
 ------------------------
-| |
-| Backend |
-| (FastAPI + Python) |
+|                      |
+|      Backend         |
+|  (FastAPI + Python)  |
 ------------------------
 |
 ┌───────┴──────────────────────────────────────────────┐
-| |
-| [a] Parse document (if uploaded) |
-| └──> Extract text using PyMuPDF / pdfplumber |
-| └──> Store parsed text in memory (e.g. global) |
-| |
-| [b] Maintain in-memory chat_history list: |
-| └──> [system, user, assistant, user, ...] |
-| └──> Trims old entries if token limit exceeded |
-| |
-| [c] Append new question to chat_history |
-| |
-| [d] Call Azure OpenAI API: |
-| └──> Endpoint: https://panta-code-challenge... |
-| └──> Deployment: gpt-4o |
-| └──> API-Version: 2025-01-01-preview |
-| └──> Request: |
-| { |
-| "messages": chat_history, |
-| "max_tokens": 500 |
-| } |
-| |
-| [e] Receive LLM Response |
-| └──> Append to chat_history |
-| └──> Return to frontend |
+|                                                      |
+|  [a] Parse document (if uploaded)                    |
+|     └──> Extract text using PyMuPDF / pdfplumber     |
+|     └──> Store parsed text in memory (e.g. global)   |
+|                                                      |
+|  [b] Maintain in-memory chat_history list:           |
+|     └──> [system, user, assistant, user, ...]        |
+|     └──> Trims old entries if token limit exceeded   |
+|                                                      |
+|  [c] Append new question to chat_history             |
+|                                                      |
+|  [d] Call Azure OpenAI API:                          |
+|     └──> Deployment: gpt-4o                          |
+|     └──> API-Version: 2025-01-01-preview             |
+|                                                      |
+|  [e] Receive LLM Response                            |
+|     └──> Append to chat_history                      |
+|     └──> Return to frontend                          |
 └──────────────────────────────────────────────────────┘
 |
 V
 Display Answer in UI
-└──> Optionally render as chat
-Planning File Structure
-OK gpt lets make the file structure
-I'll be a mono Repo with frontend and backend folder + readme
-Setting Up Basic Backend Structure
-HIGH LEVEL BASIC SETUP V1:
-Implementing API Endpoints
-Lets implement the useful API:
-Adjusting Token Settings
-"max_tokens": 50 should i set it to most upper limit as if i set oit small it might crop the message whenllp respond withthe full message?
-Configuring CORS for Development and Production
-its fine as I discussed with the engineer:
-https://docubot-ai.vercel.app/ i want to allow this and loca host 3000
+```
+
+
+i want to allow this and loca host 3000
 Implementing Frontend UI Components
 Now let's implement the UI components for the frontend. I need:
 1. A file upload component for PDFs
